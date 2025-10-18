@@ -152,7 +152,7 @@ def rag_ui(req: RagRequest):
             try:
                 final = "".join(buf)
                 clean = postprocess_answer(final, num_sources=len(hits), opts=opts)
-                print("\n--- POSTPROCESSED ---\n", clean)
+                print(f"\n--- POSTPROCESSED ---\n{clean}")
             except Exception:
                 pass
     # print("------------before POSTPTOCESSED")

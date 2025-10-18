@@ -232,25 +232,16 @@ def _squash(s: str, hard_trim: int = 1200) -> str:
         return s[: hard_trim - 1].rsplit(" ", 1)[0] + "…"
     return s
 
-#def _force_numbered_list(s: str) -> str:
-#    # Split into meaningful sentences/lines and number them
-#    parts = [p.strip(" -•\t") for p in re.split(r'\.\s+|\n', s) if p.strip()]
-#    parts = [p for p in parts if len(p) > 0]
-#    print("-" * 80)
-#    print(f"\nparts:\n\n{parts}\n\n")
-#    if not parts:
-#        return s
-#    enumerated = "\n".join(f"{i+1}. {p}" for i, p in enumerate(parts))
-
 def _force_numbered_list(s: str) -> str:
+    # Split into meaningful sentences/lines and number them
     parts = [p.strip(" -•\t") for p in re.split(r'\.\s+|\n', s) if p.strip()]
     parts = [p for p in parts if len(p) > 0]
+    print("-" * 80)
+    print(f"\nparts:\n\n{parts}\n\n")
     if not parts:
         return s
-    return "\n".join(f"{i+1}. {p}" for i, p in enumerate(parts))  # ✅ Richtig
-
-    
-    return enumerated.join(f" length: {len(parts)}")
+    enumerated = "\n".join(f"{i+1}. {p}" for i, p in enumerate(parts))
+    return enumerated
 
 def _clamp_citations(s: str, max_n: int) -> str:
     # Only allow citations [1..max_n]; drop or reduce others
