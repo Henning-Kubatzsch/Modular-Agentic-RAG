@@ -1,6 +1,6 @@
 # MR First Aid Training Agent
 
-![Project preview](<ChatGPT Image 19. Aug. 2025, 16_24_51.png>)
+![Project preview](<hero_image.png>)
 
 🚑 **Project Idea**
 
