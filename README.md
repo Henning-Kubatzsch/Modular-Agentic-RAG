@@ -2,12 +2,6 @@
 
 ![Project preview](<hero_image.png>)
 
-🚑 **Project Idea**
-
-A **local, offline intelligent training agent** for **First Aid and resuscitation**.
-Long-term vision: an **interactive Mixed Reality (MR)** environment (Quest 3, multi-user) where trainees practice according to **ERC (European Resuscitation Council) guidelines**.
-A pedagogical agent, powered by **RAG (Retrieval-Augmented Generation)** and **Agentic RAG**, guides users step by step and adapts in real time.
-
 ---
 # 🌍 Vision
 
