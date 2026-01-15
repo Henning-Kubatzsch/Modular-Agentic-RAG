@@ -1,4 +1,4 @@
-# MR First Aid Training Agent
+# Modular Agentic RAG
 
 ![Project preview](<hero_image.png>)
 
@@ -9,56 +9,52 @@ Long-term vision: an **interactive Mixed Reality (MR)** environment (Quest 3, mu
 A pedagogical agent, powered by **RAG (Retrieval-Augmented Generation)** and **Agentic RAG**, guides users step by step and adapts in real time.
 
 ---
-
 # 🌍 Vision
 
-1. **Local & Offline**
+The objective is to build a high-performance, **Modular Agentic RAG Framework** that serves as a robust backend for specialized instruction agents.
 
-   * Runs on local hardware (MacBook M1 Pro → later Meta Quest 3).
-   * No cloud services → private, portable, resilient.
+1.  **API-First & Modular Design**
+    *   The core logic is exposed via a **FastAPI** backend, allowing low-latency communication with any frontend.
+    *   **Controllability:** Key model hyperparameters (temperature, top_k, ...) and retrieval settings are not hardcoded but can be dynamically adjusted via the User Interface for real-time testing.
 
-2. **Pedagogical Agent**
+2.  **Privacy & Compliance (GDPR)**
+    *   Strictly local execution ensures data sovereignty.
+    *   Ideal for sensitive domains where cloud processing is prohibited (e.g., medical data processing).
 
-   * Trainees ask: *“What should I do next?”*
-   * Answers grounded in ERC guidance and tracked progression (ambulance called, CPR started, AED used, …).
-   * Later: integrate physiological parameters from a **resuscitation dummy** (blood pressure, compression depth, O₂ saturation) for adaptive feedback.
+3.  **Specialized Use-Case: Resuscitation Support Agent**
+    *   A proof-of-concept implementation designed to support first responders in real-time.
+    * **Custom Data Pipeline & QA-Mapping:** utilizes a specialized **Question-Answer indexing strategy**. Instead of raw text chunking, the ERC guidelines were re-engineered into a custom document structure of mapped Q&A pairs. By embedding **potential input questions** rather than the target content, the system optimizes semantic alignment with user queries, ensuring high retrieval precision and a stable dialogue flow even with smaller Local LLMs.
 
-3. **Agentic RAG**
+---
 
-   * Beyond retrieval: the agent **decides how to react**, evaluates context, and provides next-step instructions.
-   * Systematically test chunking, data formatting, and model sizes for clarity and effectiveness.
+# 🏗️ System Architecture
+
+*   **Backend:** Python / FastAPI (Handles RAG logic, Vector Store, LLM Inference)
+*   **Frontend:** Separate Repository (UI for Chat, Monitoring, Evaluation, Logging and Settings)
+*   **Communication:** REST API (Low-latency asynchronous calls)
+*   **Data Layer:** Local Vector Index (currently utilizing **hnswlib** for high-efficiency nearest neighbor search) + Custom Ingestion Tools
 
 ---
 
 # 🛣️ Development Phases (Roadmap)
 
-**Phase 1 – Local RAG baseline (current)**
+**Phase 1 – Core Architecture (Completed)**
+*   [x] **Decoupling:** Split system into a FastAPI Backend and a standalone Frontend repository.
+*   [x] **Low-Latency Pipeline:** Established efficient async communication between UI and RAG engine.
+*   [x] **UI Control:** Implemented interface elements to adjust model parameters and retrieval strategies on the fly.
 
-* Run a simple offline RAG system on Mac M1 Pro.
-* ERC guidelines as knowledge base.
-* Local LLM only (e.g., Qwen GGUF via `llama-cpp-python`).
-* Conversational CLI with progression tracking.
+**Phase 2 – Advanced Data Processing (Current Focus)**
+*   [x] **Custom Ingestion Tool:** Developed a specialized document parser that preserves layout semantics.
+*   [x] **Small Model Optimization:** Tuned chunking strategies to support the constrained context windows of local models while enabling natural dialogue structures.
+*   [ ] **Evaluation Loop:** Connecting the parameter settings in the UI directly to an evaluation module to measure the impact of changes on response quality.
 
-**Phase 2 – Graph-based progression**
+**Phase 3 – Agentic Logic & State Management**
+*   [ ] Transform the retrieval process into an **Agentic Workflow** (planning steps before answering).
+*   [ ] Implement state tracking for the resuscitation scenario (Agent remembers: "Check response" -> "Call 112" -> "Start CPR").
 
-* Model the resuscitation process with LangGraph or a custom state machine.
-* Natural-language actions update the progression state.
-
-**Phase 3 – Agentic RAG evaluation**
-
-* Clean/tune ERC text (chunking).
-* Test small local LLMs for instruction quality.
-* Benchmark clarity and correctness.
-
-**Phase 4 – Standalone Quest 3 deployment**
-
-* Fully local execution on-device.
-* Voice input and agent speech output in MR.
-
-**Phase 5 – DummyStation integration**
-
-* Stream real-time parameters from a resuscitation dummy.
-* Agent adapts dynamically (e.g., compression depth too shallow → corrective feedback).
+**Phase 4 – Deployment & Real-World Simulation**
+*   [ ] Containerize the application (Docker) for easy local deployment.
+*   [ ] Final tests with real-time streaming data from the MR simulation environment.
 
 ---
 
