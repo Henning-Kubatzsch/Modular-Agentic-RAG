@@ -12,7 +12,7 @@ from typing import Optional
 from rag.generator import LocalLLM, LLMConfig
 from rag.embed import SBertEmbeddings
 from rag.indexer import HnswIndex
-from rag.retriever import Retriever
+from rag.retriever import Retriever, RetrieverConfig
 from rag.prompt import build_prompts, postprocess_answer, PromptOptions, PromptOptionsOverride, merge_prompt_options
 from rag.settings import get_settings
 
@@ -161,3 +161,19 @@ def get_config():
             status_code=500,
             detail=str(e)
         )
+    
+@app.get("/config")
+def getLLMConfig():
+    try:
+        llmConfig = LLMConfig.model_json_schema()
+        promptConfig = PromptOptions.model_json_schema()
+        retrieverConfig = RetrieverConfig.model_json_schema()
+        return {
+            "llm":llmConfig,
+            "prompt":promptConfig,
+            "retriever":retrieverConfig
+        }
+    except Exception as e:
+        return {
+            "error":str(e)
+        }

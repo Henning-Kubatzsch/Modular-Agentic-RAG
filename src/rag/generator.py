@@ -27,7 +27,7 @@ from rag.interfaces import ChatModel
 
 
 class LLMConfig(BaseModel):
-    model_path: str
+    model_path: str = Field(default="models/qwen2.5-3b-instruct-q4_k_m.gguf")
     family: Literal["qwen", "qwen2", "qwen2.5", "llama3", "phi3", "mistral"] = "qwen"
     n_ctx: int = Field(default=4096, ge=512, le=32768)
     n_gpu_layers: int = Field(default=-1)
