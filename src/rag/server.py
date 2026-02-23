@@ -145,9 +145,11 @@ async def rag_ui(req: RagRequest):
 
 
 @app.get("/get_config")
-def get_yaml():
+def get_config():
     try:
         config = load_config(yaml_path)
+        t = type(config)
+        config["type"] = str(t)
         return config
     except FileNotFoundError:
         raise HTTPException(

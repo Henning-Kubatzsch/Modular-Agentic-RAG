@@ -2,6 +2,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Iterable, List, Dict, Tuple, Literal, Optional
+from pydantic import BaseModel, Field
 import re
 import textwrap
 
@@ -12,13 +13,13 @@ import textwrap
 Language = Literal["en", "de"]
 Style = Literal["steps", "qa"]
 
-@dataclass
-class PromptOptions:
-    language: str = "en"             # "en" | "de"
-    style: str = "steps"             # "steps" | "qa"
-    max_context_chars: int = 4000    # Budget for context
-    cite: bool = True                # [1], [2] citations
-    require_citations: bool = True   # Answer MUST contain [n], otherwise append a note
+
+class PromptOptions(BaseModel):
+    language: Literal["en", "de"] = "en"
+    style: Literal["steps", "qa"] = "steps"
+    max_context_chars: int = Field(default=4000, ge=500, le=10000)
+    cite: bool = True
+    require_citations: bool = True
 
 @dataclass
 class PromptOptionsOverride:

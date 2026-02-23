@@ -5,12 +5,12 @@ from __future__ import annotations
 from typing import List, Dict, Any
 from rag.interfaces import Embedder, VectorIndex
 from dataclasses import dataclass
+from pydantic import BaseModel, Field
 
 import yaml
 
-@dataclass
-class RetrieverConfig:
-    k: int
+class RetrieverConfig(BaseModel):
+    k: int = Field(default=4, ge=1, le=10)
 
 yaml_path = "configs/rag.yaml"
 
