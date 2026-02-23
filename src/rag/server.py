@@ -1,6 +1,6 @@
 # src/rag/server.py
 from fastapi import FastAPI, HTTPException, Depends
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Iterable
 import yaml
@@ -35,6 +35,10 @@ def get_prompt_defaults():
 S = State()
 yaml_path = "configs/rag.yaml"
 
+def load_config(path: str):
+    with open(path, "r", encoding="utf-8") as f:
+        cfg = yaml.safe_load(f)
+        return cfg
 
 def load_llm_config(path: str) -> LLMConfig:
     """Read YAML config file and construct LLMConfig."""
@@ -107,8 +111,7 @@ def health():
     return {"ok": True}
 
 @app.post("/rag_ui")
-# def rag_ui(req: RagRequest, defaults: PromptOptions = Depends(get_prompt_defaults)):
-def rag_ui(req: RagRequest):
+async def rag_ui(req: RagRequest):
 
     opts = get_prompt_defaults()
     if(req.options):
@@ -139,3 +142,20 @@ def rag_ui(req: RagRequest):
                 pass
     # print("------------before POSTPTOCESSED")
     return StreamingResponse(gen(), media_type="text/plain; charset=utf-8")
+
+
+@app.get("/get_config")
+def get_yaml():
+    try:
+        config = load_config(yaml_path)
+        return config
+    except FileNotFoundError:
+        raise HTTPException(
+            status_code=404,
+            detail="Config file not found"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
