@@ -31,7 +31,7 @@ class LLMConfig(BaseModel):
     family: Literal["qwen", "qwen2", "qwen2.5", "llama3", "phi3", "mistral"] = "qwen"
     n_ctx: int = Field(default=4096, ge=512, le=32768)
     n_gpu_layers: int = Field(default=-1)
-    n_threads: Optional[int] = Field(default=6, ge=1, description="CPU threads for llama.cpp. None = auto-detect")
+    n_threads: int = Field(default=6, ge=1, description="CPU threads for llama.cpp. None = auto-detect")
     seed: int = Field(default=42)
     temperature: float = Field(default=0.2, ge=0.0, le=2.0)
     top_p: float = Field(default=0.9, ge=0.0, le=1.0)
