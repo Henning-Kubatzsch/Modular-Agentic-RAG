@@ -168,6 +168,8 @@ def getLLMConfig():
         llmConfig = LLMConfig.model_json_schema()
         promptConfig = PromptOptions.model_json_schema()
         retrieverConfig = RetrieverConfig.model_json_schema()
+        t = str(type(retrieverConfig))
+        print(f'type {t}')
         return {
             "llm":llmConfig,
             "prompt":promptConfig,

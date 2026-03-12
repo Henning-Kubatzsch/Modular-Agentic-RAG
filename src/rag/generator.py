@@ -31,16 +31,16 @@ class LLMConfig(BaseModel):
     family: Literal["qwen", "qwen2", "qwen2.5", "llama3", "phi3", "mistral"] = "qwen"
     n_ctx: int = Field(default=4096, ge=512, le=32768)
     n_gpu_layers: int = Field(default=-1)
-    n_threads: Optional[int] = None
+    n_threads: Optional[int] = Field(default=6, ge=1, description="CPU threads for llama.cpp. None = auto-detect")
     seed: int = Field(default=42)
     temperature: float = Field(default=0.2, ge=0.0, le=2.0)
     top_p: float = Field(default=0.9, ge=0.0, le=1.0)
     repeat_penalty: float = Field(default=1.1, ge=0.0)
     max_tokens: int = Field(default=512, ge=1, le=8192)
     stop: Optional[List[str]] = Field(default=None)
-    n_batch: Optional[int] = None
-    use_mmap: Optional[bool] = None
-    use_mlock: Optional[bool] = None
+    n_batch: int = Field(default=256, ge=32, le=2048, description="Batch for prompt processing")
+    use_mmap: bool = Field(default=False)
+    use_mlock: bool = Field(default=False)
 
 def load_llm_config(path: str) -> LLMConfig:
     """Read YAML and construct LLMConfig."""
