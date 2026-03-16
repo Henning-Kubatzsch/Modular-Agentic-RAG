@@ -27,18 +27,37 @@ class State:
 
 class RagRequest(BaseModel):
     q: str
-    options: Optional[PromptOptionsOverride] = None 
+    #options: Optional[PromptOptionsOverride] = None 
+
+class Config(BaseModel):
+    llm: LLMConfig
+    prompt: PromptOptions
+    retriever: RetrieverConfig
+    
 
 def get_prompt_defaults():
     return get_settings().prompt
 
 S = State()
 yaml_path = "configs/rag.yaml"
+yaml_test = "configs/test.yaml"
 
 def load_config(path: str):
     with open(path, "r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
         return cfg
+    
+def save_cfg(path:str, cfg: any):
+    def strip_none(d):
+        if isinstance(d, dict):
+            return {k: strip_none(v) for k,v in d.items() if v is not None}
+        return d
+    
+    with open(path, 'w', encoding="utf-8") as f:
+        yaml.dump(strip_none(cfg), f, allow_unicode=True, default_flow_style=False)
+    return {
+        "message" : "wrote config"
+    }
 
 def load_llm_config(path: str) -> LLMConfig:
     """Read YAML config file and construct LLMConfig."""
@@ -114,8 +133,8 @@ def health():
 async def rag_ui(req: RagRequest):
 
     opts = get_prompt_defaults()
-    if(req.options):
-        opts = merge_prompt_options(opts, req.options)
+    #if(req.options):
+    #    opts = merge_prompt_options(opts, req.options)
     
     q = req.q
     hits = S.retriever.search(q)
@@ -142,6 +161,17 @@ async def rag_ui(req: RagRequest):
                 pass
     # print("------------before POSTPTOCESSED")
     return StreamingResponse(gen(), media_type="text/plain; charset=utf-8")
+
+@app.post("/save_config")
+def save_config(conf: Config):
+    try:
+        cfg = conf.model_dump(mode='json')
+        save_cfg(yaml_test, cfg)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
 
 
 @app.get("/get_config")
