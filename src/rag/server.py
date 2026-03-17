@@ -177,7 +177,7 @@ def save_config(conf: Config):
 @app.get("/get_config")
 def get_config():
     try:
-        config = load_config(yaml_path)
+        config = load_config(yaml_test)
         #t = type(config)
         #config["type"] = str(t)
         return config

@@ -2,11 +2,11 @@ llm:
   family: qwen
   max_tokens: 512
   model_path: models/qwen2.5-3b-instruct-q4_k_m.gguf
-  n_batch: 256
+  n_batch: 260
   n_ctx: 2048
   n_gpu_layers: -1
   n_threads: 8
-  repeat_penalty: 1.1
+  repeat_penalty: 4.4
   seed: 42
   temperature: 1.4
   top_p: 0.9
