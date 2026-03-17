@@ -162,7 +162,7 @@ async def rag_ui(req: RagRequest):
     # print("------------before POSTPTOCESSED")
     return StreamingResponse(gen(), media_type="text/plain; charset=utf-8")
 
-@app.post("/save_config")
+@app.put("/save_config")
 def save_config(conf: Config):
     try:
         cfg = conf.model_dump(mode='json')
