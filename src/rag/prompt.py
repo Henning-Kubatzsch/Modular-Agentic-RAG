@@ -21,25 +21,6 @@ class PromptOptions(BaseModel):
     cite: bool = True
     require_citations: bool = True
 
-@dataclass
-class PromptOptionsOverride:
-    language: Optional[Language] = None
-    style: Optional[Style] = None
-    max_context_chars: Optional[int] = None
-    cite: Optional[bool] = None
-    require_citations: Optional[bool] = None
-
-def merge_prompt_options(base: PromptOptions, o: Optional[PromptOptionsOverride]) -> PromptOptions:
-    if o is None:
-        return base
-    return PromptOptions(
-        language = o.language if o.language is not None else base.language,
-        style = o.style if o.style is not None else base.style,
-        max_context_chars= o.max_context_chars if o.max_context_chars is not None else base.max_context_chars,
-        cite = o.cite if o.cite is not None else base.cite,
-        require_citations = o.require_citations if o.require_citations is not None else base.require_citations
-    )
-
 
 def build_prompts(
     question: str,

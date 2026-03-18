@@ -1,22 +1,22 @@
 llm:
-  family: qwen
-  max_tokens: 512
   model_path: models/qwen2.5-3b-instruct-q4_k_m.gguf
-  n_batch: 266
+  family: qwen
   n_ctx: 2048
   n_gpu_layers: -1
-  n_threads: 10
-  repeat_penalty: 7.0
+  n_threads: 8
+  n_batch: 256
   seed: 42
-  temperature: 1.4
+  temperature: 0.4
   top_p: 0.9
-  use_mlock: false
+  repeat_penalty: 1.1
+  max_tokens: 512
   use_mmap: false
+  use_mlock: false
 prompt:
-  cite: false
   language: en
-  max_context_chars: 3000
-  require_citations: false
   style: steps
+  max_context_chars: 3000
+  cite: false
+  require_citations: false
 retriever:
   k: 3

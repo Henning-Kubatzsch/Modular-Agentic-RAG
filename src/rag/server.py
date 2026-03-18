@@ -13,7 +13,7 @@ from rag.generator import LocalLLM, LLMConfig
 from rag.embed import SBertEmbeddings
 from rag.indexer import HnswIndex
 from rag.retriever import Retriever, RetrieverConfig
-from rag.prompt import build_prompts, postprocess_answer, PromptOptions, PromptOptionsOverride, merge_prompt_options
+from rag.prompt import build_prompts, postprocess_answer, PromptOptions
 from rag.settings import get_settings
 
 log = logging.getLogger(__name__)
@@ -40,7 +40,6 @@ def get_prompt_defaults():
 
 S = State()
 yaml_path = "configs/rag.yaml"
-yaml_test = "configs/test.yaml"
 
 def load_config(path: str):
     with open(path, "r", encoding="utf-8") as f:
@@ -132,9 +131,8 @@ def health():
 @app.post("/rag_ui")
 async def rag_ui(req: RagRequest):
 
+    # just returns prompt setting form rag.yaml
     opts = get_prompt_defaults()
-    #if(req.options):
-    #    opts = merge_prompt_options(opts, req.options)
     
     q = req.q
     hits = S.retriever.search(q)
@@ -166,7 +164,7 @@ async def rag_ui(req: RagRequest):
 def save_config(conf: Config):
     try:
         cfg = conf.model_dump(mode='json')
-        save_cfg(yaml_test, cfg)
+        save_cfg(yaml_path, cfg)
     except Exception as e:
         raise HTTPException(
             status_code=500,
@@ -177,7 +175,7 @@ def save_config(conf: Config):
 @app.get("/get_config")
 def get_config():
     try:
-        config = load_config(yaml_test)
+        config = load_config(yaml_path)
         #t = type(config)
         #config["type"] = str(t)
         return config
